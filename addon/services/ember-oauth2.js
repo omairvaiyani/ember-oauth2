@@ -1,4 +1,8 @@
-import Ember from 'ember';
+import Service from "@ember/service";
+import Evented from "@ember/object/evented";
+import RSVP from "rsvp";
+import { on } from "@ember/object/evented";
+import { warn } from "@ember/debugger";
 
 /**
  * @overview OAuth2 addon for Emberjs that stores tokens in the browsers localStorage
@@ -9,7 +13,7 @@ import Ember from 'ember';
  * @module ember-oauth2
  * @class ember-oauth2
  */
-export default Ember.Service.extend(Ember.Evented, {
+export default Service.extend(Evented, {
   VERSION: '2.0.4-beta',
   /**
    * initialize with the providerId to find in
@@ -85,7 +89,7 @@ export default Ember.Service.extend(Ember.Evented, {
     if (window.focus && dialog) {
       dialog.focus();
     }
-    return new Ember.RSVP.Promise(function(resolve, reject) {
+    return new RSVP.Promise(function(resolve, reject) {
       if (dialog) {
         resolve(dialog);
       } else {
@@ -103,7 +107,7 @@ export default Ember.Service.extend(Ember.Evented, {
    * @param {Function} callback Optional callback
    */
 
-  handleRedirect: Ember.on('redirect', function(hash, callback) {
+  handleRedirect: on('redirect', function(hash, callback) {
     let self = this;
     let params = self.parseCallback(hash);
 
@@ -198,7 +202,7 @@ export default Ember.Service.extend(Ember.Evented, {
    * @return {Promise} Checks with the endpoint if the token is valid
    */
   verifyToken: function() {
-    return Ember.RSVP.Promise.resolve(true);
+    return RSVP.Promise.resolve(true);
   },
 
   /**
@@ -217,7 +221,7 @@ export default Ember.Service.extend(Ember.Evented, {
       this.removeState(this.stateKeyName());
       return true;
     } else {
-      Ember.Logger.warn(
+      warn(
         'State returned from the server did not match the local saved state.'
       );
       return false;
