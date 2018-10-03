@@ -1,5 +1,3 @@
-import Ember from 'ember';
-
 /**
  * @overview OAuth2 addon for Emberjs that stores tokens in the browsers localStorage
  * @license   Licensed under MIT license
